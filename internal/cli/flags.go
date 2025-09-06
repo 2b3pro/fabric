@@ -331,6 +331,46 @@ func readSchemaFile(schemaFileName string) (string, error) {
 	return "", fmt.Errorf("could not find or read schema file '%s' in '%s' or as an absolute path", schemaFileName, configSchemaDir)
 }
 
+// readSchemaFile reads the content of a schema file from the user's Fabric configuration 'Schemas' directory or a full path.
+// It attempts to find the file with and without a '.json' extension in the config directory, or directly if a full path is provided.
+func readSchemaFile(schemaFileName string) (string, error) {
+	// First, check if schemaFileName is an absolute path
+	if filepath.IsAbs(schemaFileName) {
+		content, err := os.ReadFile(schemaFileName)
+		if err == nil {
+			return string(content), nil
+		}
+		// If it's an absolute path but not found, return the error directly
+		return "", fmt.Errorf("could not read schema file from absolute path '%s': %w", schemaFileName, err)
+	}
+
+	// If not an absolute path, proceed with searching in the config directory
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("could not determine user home directory: %w", err)
+	}
+
+	configSchemaDir := filepath.Join(homeDir, ".config", "fabric", "schemas")
+
+	// Try reading the file directly from the config directory
+	filePath := filepath.Join(configSchemaDir, schemaFileName)
+	content, err := os.ReadFile(filePath)
+	if err == nil {
+		return string(content), nil
+	}
+
+	// If not found, try appending .json extension in the config directory
+	if filepath.Ext(schemaFileName) != ".json" {
+		filePathWithExt := filepath.Join(configSchemaDir, schemaFileName+".json")
+		content, err := os.ReadFile(filePathWithExt)
+		if err == nil {
+			return string(content), nil
+		}
+	}
+
+	return "", fmt.Errorf("could not find or read schema file '%s' in '%s' or as an absolute path", schemaFileName, configSchemaDir)
+}
+
 func loadYAMLConfig(configPath string) (*Flags, error) {
 	absPath, err := util.GetAbsolutePath(configPath)
 	if err != nil {
