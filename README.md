@@ -10,9 +10,7 @@
     </a>
 </div>
 
-<br>
-
-<div align="center">
+[![Github Repo Tagline](https://github.com/user-attachments/assets/96ab3d81-9b13-4df4-ba09-75dee7a5c3d2)](https://warp.dev/fabric)
 
 <img src="./docs/images/fabric-logo-gif.gif" alt="fabriclogo" width="400" height="400"/>
 
@@ -27,10 +25,6 @@
 
 <div align="center">
 <h4><code>fabric</code> is an open-source framework for augmenting humans using AI.</h4>
-</div>
-
-![Screenshot of fabric](./docs/images/fabric-summarize.png)
-
 </div>
 
 [Updates](#updates) •
