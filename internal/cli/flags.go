@@ -175,6 +175,13 @@ func Init() (ret *Flags, err error) {
 
 	// If config specified, load and apply YAML for unused flags
 	if ret.Config != "" {
+		// Resolve config path relative to ~/.config/fabric/configs when a bare name is provided
+		if resolved, rerr := resolveConfigFilePath(ret.Config); rerr == nil && resolved != "" {
+			ret.Config = resolved
+		} else if rerr != nil {
+			// Keep existing behavior (loadYAMLConfig will return a user-friendly error), but log detail for debugging
+			debuglog.Debug(debuglog.Detailed, "Config path resolution warning for %q: %v\n", ret.Config, rerr)
+		}
 		var yamlFlags *Flags
 		if yamlFlags, err = loadYAMLConfig(ret.Config); err != nil {
 			return
@@ -369,6 +376,46 @@ func readSchemaFile(schemaFileName string) (string, error) {
 	}
 
 	return "", fmt.Errorf("could not find or read schema file '%s' in '%s' or as an absolute path", schemaFileName, configSchemaDir)
+}
+
+// resolveConfigFilePath resolves a provided --config value to a concrete file path.
+// Behavior:
+// - If an absolute path or a path containing separators is provided, return it as-is (to be resolved by util.GetAbsolutePath).
+// - If a bare name is provided (no path separators), look in ~/.config/fabric/configs for:
+//   1) name
+//   2) name.yaml
+//   3) name.yml
+// Returns the first match found, otherwise returns an error.
+func resolveConfigFilePath(configArg string) (string, error) {
+    if configArg == "" {
+        return "", fmt.Errorf("empty config argument")
+    }
+
+    // If absolute or contains a path separator, leave resolution to util.GetAbsolutePath/loadYAMLConfig
+    if filepath.IsAbs(configArg) || strings.Contains(configArg, string(os.PathSeparator)) {
+        return configArg, nil
+    }
+
+    homeDir, err := os.UserHomeDir()
+    if err != nil {
+        return "", fmt.Errorf("could not determine user home directory: %w", err)
+    }
+
+    configDir := filepath.Join(homeDir, ".config", "fabric", "configs")
+
+    candidates := []string{
+        filepath.Join(configDir, configArg),
+        filepath.Join(configDir, configArg+".yaml"),
+        filepath.Join(configDir, configArg+".yml"),
+    }
+
+    for _, p := range candidates {
+        if fi, err := os.Stat(p); err == nil && !fi.IsDir() {
+            return p, nil
+        }
+    }
+
+    return "", fmt.Errorf("could not resolve config %q in %q (tried with .yaml/.yml)", configArg, configDir)
 }
 
 func loadYAMLConfig(configPath string) (*Flags, error) {
