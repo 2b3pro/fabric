@@ -37,7 +37,6 @@ type testVendor struct {
 }
 
 func (m *testVendor) GetName() string                       { return m.name }
-func (m *testVendor) GetProviderName() string               { return m.name }
 func (m *testVendor) GetSetupDescription() string           { return m.name }
 func (m *testVendor) IsConfigured() bool                    { return true }
 func (m *testVendor) Configure() error                      { return nil }

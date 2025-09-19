@@ -353,3 +353,7 @@ tmp/
 
 # Ignore .claude/
 .claude/
+
+# go-related
+.gocache
+.gomodcache
