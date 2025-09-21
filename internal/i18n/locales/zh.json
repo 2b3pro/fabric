@@ -150,6 +150,7 @@
   "send_desktop_notification": "命令完成时发送桌面通知",
   "custom_notification_command": "用于通知的自定义命令（覆盖内置通知）",
   "set_reasoning_thinking_level": "设置推理/思考级别（例如，off、low、medium、high，或 Anthropic 或 Google Gemini 的数字令牌）",
+  "maximum_tokens_to_generate": "要生成的最大令牌数（适用特定于提供商的限制）",
   "set_debug_level": "设置调试级别（0=关闭，1=基本，2=详细，3=跟踪）",
   "usage_header": "用法：",
   "application_options_header": "应用程序选项：",

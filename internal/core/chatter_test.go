@@ -72,7 +72,7 @@ func (m *mockVendor) Send(ctx context.Context, messages []*chat.ChatCompletionMe
 }
 
 func (m *mockVendor) NeedsRawMode(modelName string) bool {
-    return false
+	return false
 }
 
 // Enhanced mock vendor for schema testing
@@ -449,7 +449,7 @@ func TestChatter_BuildSession_EmptyRequest(t *testing.T) {
 	// Test with completely empty request - BuildSession creates a default message
 	request := &domain.ChatRequest{}
 
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
 	// BuildSession should succeed - it creates a message with space content
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
@@ -497,8 +497,7 @@ func TestChatter_BuildSession_WithContext(t *testing.T) {
 		},
 	}
 
-
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -549,8 +548,7 @@ func TestChatter_BuildSession_WithPattern(t *testing.T) {
 		},
 	}
 
-
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -587,8 +585,7 @@ func TestChatter_BuildSession_WithMeta(t *testing.T) {
 		},
 	}
 
-
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -627,8 +624,7 @@ func TestChatter_BuildSession_WithLanguage(t *testing.T) {
 		},
 	}
 
-
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, false)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -668,8 +664,7 @@ func TestChatter_BuildSession_RawMode(t *testing.T) {
 		},
 	}
 
-
-session, err := chatter.BuildSession(request, &domain.ChatOptions{}, true) // raw mode = true
+	session, err := chatter.BuildSession(request, &domain.ChatOptions{}, true) // raw mode = true
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -693,7 +688,6 @@ session, err := chatter.BuildSession(request, &domain.ChatOptions{}, true) // ra
 		t.Errorf("Expected 2 MultiContent parts, got %d", len(userMsg.MultiContent))
 	}
 }
-
 
 func TestChatter_Send_WithSchemaContent(t *testing.T) {
 	tempDir := t.TempDir()
@@ -758,8 +752,8 @@ func TestChatter_Send_CreateCodingFeaturePattern(t *testing.T) {
 		t.Fatalf("Failed to create pattern file: %v", err)
 	}
 
-    // Mock response that includes summary and a machine-readable file changes marker + JSON
-    response := "## Summary\nCreated a new feature\n\n" + domain.FileChangesMarker + `
+	// Mock response that includes summary and a machine-readable file changes marker + JSON
+	response := "## Summary\nCreated a new feature\n\n" + domain.FileChangesMarker + `
 [
   {"operation":"create","path":"test.txt","content":"test content"},
   {"operation":"update","path":"existing.txt","content":"updated content"}
@@ -802,13 +796,13 @@ func TestChatter_Send_CreateCodingFeaturePattern(t *testing.T) {
 
 	// Response should be just the summary, file changes should be applied
 	last := session.GetLastMessage()
-    if !strings.Contains(last.Content, "Created a new feature") {
-        t.Errorf("Expected summary in response, got: %s", last.Content)
-    }
-    // Ensure the marker and JSON file changes are not present in the final response
-    if strings.Contains(last.Content, domain.FileChangesMarker) || strings.Contains(last.Content, "\"") || strings.Contains(last.Content, "[") {
-        t.Errorf("File changes marker/JSON should be removed from response, got: %s", last.Content)
-    }
+	if !strings.Contains(last.Content, "Created a new feature") {
+		t.Errorf("Expected summary in response, got: %s", last.Content)
+	}
+	// Ensure the marker and JSON file changes are not present in the final response
+	if strings.Contains(last.Content, domain.FileChangesMarker) || strings.Contains(last.Content, "\"") || strings.Contains(last.Content, "[") {
+		t.Errorf("File changes marker/JSON should be removed from response, got: %s", last.Content)
+	}
 }
 
 func TestChatter_Send_NonStreamingError(t *testing.T) {

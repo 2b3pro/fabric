@@ -150,6 +150,7 @@
   "send_desktop_notification": "Envoyer une notification de bureau quand la commande se termine",
   "custom_notification_command": "Commande personnalisée à exécuter pour les notifications (remplace les notifications intégrées)",
   "set_reasoning_thinking_level": "Définir le niveau de raisonnement/réflexion (ex. off, low, medium, high, ou tokens numériques pour Anthropic ou Google Gemini)",
+  "maximum_tokens_to_generate": "Nombre maximum de tokens à générer (les limites spécifiques au fournisseur s'appliquent)",
   "set_debug_level": "Définir le niveau de débogage (0=désactivé, 1=basique, 2=détaillé, 3=trace)",
   "usage_header": "Utilisation :",
   "application_options_header": "Options de l'application :",

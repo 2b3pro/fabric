@@ -150,6 +150,7 @@
   "send_desktop_notification": "コマンド完了時にデスクトップ通知を送信",
   "custom_notification_command": "通知用のカスタムコマンド（内蔵通知を上書き）",
   "set_reasoning_thinking_level": "推論/思考レベルを設定（例：off、low、medium、high、またはAnthropicやGoogle Gemini用の数値トークン）",
+  "maximum_tokens_to_generate": "生成する最大トークン数（プロバイダー固有の制限が適用されます）",
   "set_debug_level": "デバッグレベルを設定（0=オフ、1=基本、2=詳細、3=トレース）",
   "usage_header": "使用法：",
   "application_options_header": "アプリケーションオプション：",

@@ -150,6 +150,7 @@
   "send_desktop_notification": "ارسال اعلان دسک‌تاپ هنگام تکمیل دستور",
   "custom_notification_command": "دستور سفارشی برای اجرای اعلان‌ها (جایگزین اعلان‌های داخلی)",
   "set_reasoning_thinking_level": "تنظیم سطح استدلال/تفکر (مثال: off، low، medium، high، یا توکن‌های عددی برای Anthropic یا Google Gemini)",
+  "maximum_tokens_to_generate": "حداکثر تعداد توکن‌ها برای تولید (محدودیت‌های خاص ارائه‌دهنده اعمال می‌شود)",
   "set_debug_level": "تنظیم سطح اشکال‌زدایی (0=خاموش، 1=پایه، 2=تفصیلی، 3=ردیابی)",
   "usage_header": "استفاده:",
   "application_options_header": "گزینه‌های برنامه:",
