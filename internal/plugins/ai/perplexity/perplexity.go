@@ -101,24 +101,8 @@ func (c *Client) Send(ctx context.Context, msgs []*chat.ChatCompletionMessage, o
 		requestOptions = append(requestOptions, perplexity.WithFrequencyPenalty(opts.FrequencyPenalty))
 	}
 
-	// If transformed schema is available, use it for JSON schema response format
-	if opts.TransformedSchema != nil {
-		if transformedSchema, ok := opts.TransformedSchema.(map[string]interface{}); ok {
-			// Check if it's a JSON schema response format (from centralized schema transformation)
-			if schemaType, exists := transformedSchema["type"]; exists && schemaType == "json_schema" {
-				if jsonSchemaSection, exists := transformedSchema["json_schema"]; exists {
-					if jsonSchemaMap, ok := jsonSchemaSection.(map[string]interface{}); ok {
-						if actualSchema, exists := jsonSchemaMap["schema"]; exists {
-							requestOptions = append(requestOptions, perplexity.WithJSONSchemaResponseFormat(actualSchema))
-						}
-					}
-				}
-			} else {
-				// Fallback: use the transformed schema directly if it's not in the expected format
-				requestOptions = append(requestOptions, perplexity.WithJSONSchemaResponseFormat(transformedSchema))
-			}
-		}
-	}
+	// Note: Perplexity API does not support JSON schema response format in perplexity-go library
+	// Schema handling is done through schemaManager.HandleResponseParsing instead
 
 	request := perplexity.NewCompletionRequest(requestOptions...)
 
@@ -173,24 +157,8 @@ func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.Cha
 		requestOptions = append(requestOptions, perplexity.WithFrequencyPenalty(opts.FrequencyPenalty))
 	}
 
-	// If transformed schema is available, use it for JSON schema response format
-	if opts.TransformedSchema != nil {
-		if transformedSchema, ok := opts.TransformedSchema.(map[string]interface{}); ok {
-			// Check if it's a JSON schema response format (from centralized schema transformation)
-			if schemaType, exists := transformedSchema["type"]; exists && schemaType == "json_schema" {
-				if jsonSchemaSection, exists := transformedSchema["json_schema"]; exists {
-					if jsonSchemaMap, ok := jsonSchemaSection.(map[string]interface{}); ok {
-						if actualSchema, exists := jsonSchemaMap["schema"]; exists {
-							requestOptions = append(requestOptions, perplexity.WithJSONSchemaResponseFormat(actualSchema))
-						}
-					}
-				}
-			} else {
-				// Fallback: use the transformed schema directly if it's not in the expected format
-				requestOptions = append(requestOptions, perplexity.WithJSONSchemaResponseFormat(transformedSchema))
-			}
-		}
-	}
+	// Note: Perplexity API does not support JSON schema response format in perplexity-go library
+	// Schema handling is done through schemaManager.HandleResponseParsing instead
 
 	request := perplexity.NewCompletionRequest(requestOptions...)
 
