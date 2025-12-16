@@ -112,9 +112,25 @@ func (c *Client) Send(ctx context.Context, msgs []*chat.ChatCompletionMessage, o
 		return "", fmt.Errorf("perplexity API request failed: %w", err)
 	}
 
+<<<<<<< HEAD
 	// Use the centralized schema plugin for parsing
 	schemaManager := schema.NewManager()
 	return schemaManager.HandleResponseParsing("perplexity", resp, opts)
+=======
+	var content strings.Builder
+	content.WriteString(resp.GetLastContent())
+
+	// Append citations if available
+	citations := resp.GetCitations()
+	if len(citations) > 0 {
+		content.WriteString("\n\n# CITATIONS\n\n")
+		for i, citation := range citations {
+			content.WriteString(fmt.Sprintf("- [%d] %s\n", i+1, citation))
+		}
+	}
+
+	return content.String(), nil
+>>>>>>> fdadeae1 (modernize: update GitHub Actions and modernize Go code with latest stdlib features)
 }
 
 func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan string) error {
