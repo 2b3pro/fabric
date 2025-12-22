@@ -1,0 +1,7 @@
+### PR [#1895](https://github.com/danielmiessler/Fabric/pull/1895) by [ksylvan](https://github.com/ksylvan): Localize setup process and add funding configuration
+
+- Localize setup prompts and error messages across multiple languages
+- Implement helper for localized questions with static environment keys
+- Update environment variable builder to handle hyphenated plugin names
+- Replace hardcoded console output with localized i18n translation strings
+- Add GitHub and Buy Me a Coffee funding configuration
