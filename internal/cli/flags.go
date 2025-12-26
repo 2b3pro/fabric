@@ -69,7 +69,7 @@ type Flags struct {
 	PrintSession                    string               `long:"printsession" description:"Print session"`
 	HtmlReadability                 bool                 `long:"readability" description:"Convert HTML input into a clean, readable view"`
 	InputHasVars                    bool                 `long:"input-has-vars" description:"Apply variables to user input"`
-	NoVariableReplacement           bool                 `long:"no-variable-replacement" description:"Disable pattern variable replacement"`
+	NoVariableReplacement           bool                 `long:"no-variable-replacement" yaml:"noVariableReplacement" description:"Disable pattern variable replacement"`
 	DryRun                          bool                 `long:"dry-run" description:"Show what would be sent to the model without actually sending it"`
 	Serve                           bool                 `long:"serve" description:"Serve the Fabric Rest API"`
 	ServeOllama                     bool                 `long:"serveOllama" description:"Serve the Fabric Rest API with ollama endpoints"`
