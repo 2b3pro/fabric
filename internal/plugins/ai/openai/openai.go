@@ -112,11 +112,6 @@ func (c *Client) GetProviderName() string {
 	return "openai"
 }
 
-// GetProviderName returns the provider identifier for schema handling
-func (c *Client) GetProviderName() string {
-	return "openai"
-}
-
 func (o *Client) SendStream(
 	msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan string,
 ) (err error) {
