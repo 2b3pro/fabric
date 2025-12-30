@@ -41,7 +41,7 @@ func NewClient() (ret *Client) {
 	ret.UseOAuth = ret.AddSetupQuestionBool("Use OAuth login", false)
 	ret.ApiKey = ret.PluginBase.AddSetupQuestion("API key", false)
 
-	ret.maxTokens = 4096
+	ret.maxTokens = 8192
 	ret.defaultRequiredUserMessage = "Hi"
 	ret.models = []string{
 		string(anthropic.ModelClaude3_7SonnetLatest), string(anthropic.ModelClaude3_7Sonnet20250219),
@@ -184,6 +184,27 @@ func parseThinking(level domain.ThinkingLevel) (anthropic.ThinkingConfigParamUni
 	return anthropic.ThinkingConfigParamUnion{}, false
 }
 
+// getThinkingBudget returns the token budget for a given thinking level.
+// Returns 0 if thinking is off or invalid.
+func getThinkingBudget(level domain.ThinkingLevel) int64 {
+	lower := strings.ToLower(string(level))
+	switch domain.ThinkingLevel(lower) {
+	case domain.ThinkingOff:
+		return 0
+	case domain.ThinkingLow, domain.ThinkingMedium, domain.ThinkingHigh:
+		if budget, ok := domain.ThinkingBudgets[domain.ThinkingLevel(lower)]; ok {
+			return budget
+		}
+	default:
+		if tokens, err := strconv.ParseInt(lower, 10, 64); err == nil {
+			if tokens >= 1 && tokens <= 10000 {
+				return tokens
+			}
+		}
+	}
+	return 0
+}
+
 func (an *Client) SendStream(
 	msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan string,
 ) (err error) {
@@ -237,7 +258,7 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 	if opts.MaxTokens > 0 {
 		params.MaxTokens = int64(opts.MaxTokens)
 	} else {
-		params.MaxTokens = int64(an.maxTokens) // Default: 4096
+		params.MaxTokens = int64(an.maxTokens) // Default: 8192
 	}
 
 	// Only set one of Temperature or TopP as some models don't allow both
@@ -323,6 +344,17 @@ func (an *Client) buildMessageParams(msgs []anthropic.MessageParam, opts *domain
 
 	if t, ok := parseThinking(opts.Thinking); ok {
 		params.Thinking = t
+
+		// Ensure max_tokens is sufficient to cover thinking budget + output
+		// Anthropic requires max_tokens to accommodate both thinking and response tokens
+		const minOutputTokens int64 = 4096
+		thinkingBudget := getThinkingBudget(opts.Thinking)
+		if thinkingBudget > 0 {
+			minRequired := thinkingBudget + minOutputTokens
+			if params.MaxTokens < minRequired {
+				params.MaxTokens = minRequired
+			}
+		}
 	}
 
 	return
