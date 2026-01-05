@@ -105,6 +105,7 @@ type Flags struct {
 	NotificationCommand             string               `long:"notification-command" yaml:"notificationCommand" description:"Custom command to run for notifications (overrides built-in notifications)"`
 	Thinking                        domain.ThinkingLevel `long:"thinking" yaml:"thinking" description:"Set reasoning/thinking level (e.g., off, low, medium, high, or numeric tokens for Anthropic or Google Gemini)"`
 	MaxTokens                       int                  `long:"max-tokens" yaml:"maxTokens" description:"Maximum number of tokens to generate (provider-specific limits apply)"`
+	ShowMetadata                    bool                 `long:"show-metadata" description:"Print metadata to stderr"`
 	Debug                           int                  `long:"debug" description:"Set debug level (0=off, 1=basic, 2=detailed, 3=trace)" default:"0"`
 	Schema                          string               `long:"schema" yaml:"schema" description:"Name of a JSON schema file from the schemas folder to use for structuring the output"`
 }
@@ -564,6 +565,7 @@ func (o *Flags) BuildChatOptions() (ret *domain.ChatOptions, err error) {
 		Notification:        o.Notification || o.NotificationCommand != "",
 		NotificationCommand: o.NotificationCommand,
 		SchemaContent:       o.PatternVariables["schema"], // Use the schema content from PatternVariables
+		ShowMetadata:        o.ShowMetadata,
 	}
 	return
 }

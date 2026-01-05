@@ -53,6 +53,9 @@ type ChatOptions struct {
 	NotificationCommand string
 	SchemaContent       string
 	TransformedSchema   interface{} // Provider-specific transformed schema
+	ShowMetadata        bool
+	Quiet               bool
+	UpdateChan          chan StreamUpdate
 }
 
 // NormalizeMessages remove empty messages and ensure messages order user-assist-user

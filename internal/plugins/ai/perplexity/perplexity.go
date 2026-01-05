@@ -116,7 +116,7 @@ func (c *Client) Send(ctx context.Context, msgs []*chat.ChatCompletionMessage, o
 	return schemaManager.HandleResponseParsing("perplexity", resp, opts)
 }
 
-func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan string) error {
+func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.ChatOptions, channel chan domain.StreamUpdate) error {
 	if c.client == nil {
 		if err := c.Configure(); err != nil {
 			close(channel) // Ensure channel is closed on error
@@ -193,7 +193,21 @@ func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.Cha
 			}
 			if contentDelta != "" {
 				fullContent += contentDelta // Accumulate
-				channel <- contentDelta
+				channel <- domain.StreamUpdate{
+					Type:    domain.StreamTypeContent,
+					Content: contentDelta,
+				}
+			}
+
+			if resp.Usage.TotalTokens != 0 {
+				channel <- domain.StreamUpdate{
+					Type: domain.StreamTypeUsage,
+					Usage: &domain.UsageMetadata{
+						InputTokens:  int(resp.Usage.PromptTokens),
+						OutputTokens: int(resp.Usage.CompletionTokens),
+						TotalTokens:  int(resp.Usage.TotalTokens),
+					},
+				}
 			}
 		}
 
@@ -215,7 +229,10 @@ func (c *Client) SendStream(msgs []*chat.ChatCompletionMessage, opts *domain.Cha
 
 			// Only send if there's a difference, otherwise we'd send the full content twice
 			if finalContentWithCitations != fullContent {
-				channel <- finalContentWithCitations[len(fullContent):] // Send only the citations part
+				channel <- domain.StreamUpdate{
+					Type:    domain.StreamTypeContent,
+					Content: finalContentWithCitations[len(fullContent):], // Send only the citations part
+				}
 			}
 		}
 	}()
