@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.4.377 (2026-01-12)
+
+### PR [#1929](https://github.com/danielmiessler/Fabric/pull/1929) by [ksylvan](https://github.com/ksylvan): Add Mammouth as new OpenAI-compatible AI provider
+
+- Feat: add Mammouth as new OpenAI-compatible AI provider
+- Add Mammouth provider configuration with API base URL
+- Configure Mammouth to use standard OpenAI-compatible interface
+- Disable Responses API implementation for Mammouth provider
+- Add "Mammouth" to VSCode spell check dictionary
+
+## v1.4.376 (2026-01-12)
+
+### PR [#1928](https://github.com/danielmiessler/Fabric/pull/1928) by [ksylvan](https://github.com/ksylvan): Eliminate repetitive boilerplate across eight vendor implementations
+
+- Refactor: add NewVendorPluginBase factory function to reduce duplication
+- Update 8 vendor files (anthropic, bedrock, gemini, lmstudio, ollama, openai, perplexity, vertexai) to use the factory function
+- Add 3 test cases for the new factory function
+- Add centralized factory function for AI vendor plugin initialization
+- Chore: exempt json files from VSCode format-on-save
+
+### Direct commits
+
+- Docs: Add GitHub sponsor section to README
+I spend hundreds of hours a year on open source. If you'd like to help support this project, you can sponsor me here.
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+
+## v1.4.375 (2026-01-08)
+
+### PR [#1925](https://github.com/danielmiessler/Fabric/pull/1925) by [ksylvan](https://github.com/ksylvan): docs: update README to document new AI providers and features
+
+- Docs: update README to document new AI providers and features
+- List supported native and OpenAI-compatible AI provider integrations
+- Document dry run mode for previewing prompt construction
+- Explain Ollama compatibility mode for exposing API endpoints
+- Detail available prompt strategies like chain-of-thought and reflexion
+
+### PR [#1926](https://github.com/danielmiessler/Fabric/pull/1926) by [henricook](https://github.com/henricook) and [ksylvan](https://github.com/ksylvan): feat(vertexai): add dynamic model listing and multi-model support
+
+- Dynamic model listing from Vertex AI Model Garden API
+- Support for both Gemini (genai SDK) and Claude (Anthropic SDK) models
+- Curated Gemini model list with web search support for Gemini models
+- Thinking/extended thinking support for Gemini
+- TopP parameter support for Claude models
+
 ## v1.4.374 (2026-01-05)
 
 ### PR [#1924](https://github.com/danielmiessler/Fabric/pull/1924) by [ksylvan](https://github.com/ksylvan): Rename `code_helper` to `code2context` across documentation and CLI
