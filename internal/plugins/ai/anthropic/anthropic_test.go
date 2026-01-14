@@ -20,8 +20,8 @@ func TestNewClient_DefaultInitialization(t *testing.T) {
 		t.Errorf("Expected default API Base URL to be %s, got %s", defaultBaseUrl, client.ApiBaseURL.Value)
 	}
 
-	if client.maxTokens != 4096 {
-		t.Errorf("Expected default maxTokens to be 4096, got %d", client.maxTokens)
+	if client.maxTokens != 8192 {
+		t.Errorf("Expected default maxTokens to be 8192, got %d", client.maxTokens)
 	}
 
 	if len(client.models) == 0 {
