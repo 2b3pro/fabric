@@ -462,13 +462,13 @@ func TestChatter_BuildSession_EmptyRequest(t *testing.T) {
 		t.Fatal("Expected session")
 	}
 
-	// The session should have a user message with space content
+	// The session should have a user message with empty content
 	messages := session.GetVendorMessages()
 	if len(messages) != 1 {
 		t.Fatalf("Expected 1 message, got %d", len(messages))
 	}
-	if messages[0].Content != " " {
-		t.Errorf("Expected space content, got %q", messages[0].Content)
+	if messages[0].Content != "" {
+		t.Errorf("Expected empty content, got %q", messages[0].Content)
 	}
 }
 

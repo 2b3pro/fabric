@@ -27,6 +27,7 @@ func (v *stubVendor) Send(context.Context, []*chat.ChatCompletionMessage, *domai
 	return "", nil
 }
 func (v *stubVendor) NeedsRawMode(string) bool { return false }
+func (v *stubVendor) GetProviderName() string  { return "stub" }
 
 func TestVendorsManagerFindByNameCaseInsensitive(t *testing.T) {
 	manager := NewVendorsManager()
